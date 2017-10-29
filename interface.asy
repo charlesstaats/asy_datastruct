@@ -61,62 +61,7 @@ struct SortedSet_\type {
 Iterable_\type operator cast(SortedSet_\type data) { return data.iterable; }
 
 \type[] operator cast(SortedSet_\type data) { return data.iterable; }
-
-// Low-performing implementation, for testing purposes only
-/*
-Set_\type GetBadSet_\type(bool areequal(\type a, \type b)=operator==) {
-  Set_\type toreturn;
-  \type[] buffer;
-  
-  toreturn.iterable.foreach = new void(IteratorAction process(\type)) {
-    for (int ii = 0; ii < buffer.length; ++ii) {
-      IteratorAction action = process(buffer[ii]);
-      if (action.remove) {
-	buffer.delete(ii);
-	--ii;
-      }
-      if (action.stop)
-	break;
-    }
-  };
-  
-  toreturn.iterable.foreach = new void(void process(\type)) {
-    for (\type item : buffer) {
-      process(item);
-    }
-  };
-  
-  toreturn.size = new int() { return buffer.length; };
-
-  toreturn.contains = new bool(\type item) {
-    for (\type possibility : buffer) {
-      if (areequal(possibility, item)) return true; 
-    }
-    return false;
-  };
-
-  toreturn.insert = new bool(\type item) {
-    for (int ii = 0; ii < buffer.length; ++ii) {
-      if (areequal(buffer[ii], item)) return false;
-    }
-    buffer.push(item);
-    return true;
-  };
-
-  toreturn.delete = new bool(\type item) {
-    for (int ii = 0; ii < buffer.length; ++ii) {
-      if (areequal(buffer[ii], item)) {
-	buffer.delete(ii);
-	return true;
-      }
-    }
-    return false;
-  };
-
-  return toreturn;
-}
-*/
-";
+//";
 
 // An IteratorAction is immutable once constructed.
 struct IteratorAction {
