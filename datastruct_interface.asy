@@ -3,8 +3,8 @@ struct Iterable_\type {
   void foreach(IteratorAction process(\type item));
   void foreach(void process(\type item)) {
     foreach(new IteratorAction(\type Item) {
-	process(Item);
-	return IteratorAction.Continue;
+        process(Item);
+        return IteratorAction.Continue;
       });
   }
 }
@@ -66,17 +66,12 @@ bool operator!=(\type[] a, Iterable_\type b) { return !(b == a); }
 
 // An IteratorAction is immutable once constructed.
 struct IteratorAction {
-  restricted bool remove;
   restricted bool stop;
-  void operator init(bool remove=false, bool stop=false) {
-    this.remove = remove;
+  void operator init(bool stop=false) {
     this.stop = stop;
   }
   // Since an IteratorAction is immutable, externally visible
   // constants of type IteratorAction are reasonable.
   restricted static IteratorAction Continue = IteratorAction();
-  restricted static IteratorAction Remove = IteratorAction(remove=true);
   restricted static IteratorAction Quit = IteratorAction(stop=true);
-  restricted static IteratorAction RemoveAndQuit =
-    IteratorAction(remove=true, stop=true);
 }

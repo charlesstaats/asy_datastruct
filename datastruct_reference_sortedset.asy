@@ -14,12 +14,7 @@ SortedSet_\type GetBadSortedSet_\type(
   toreturn.iterable.foreach = new void(IteratorAction process(\type)) {
     for (int ii = 0; ii < buffer.length; ++ii) {
       IteratorAction action = process(buffer[ii]);
-      if (action.remove) {
-	buffer.delete(ii);
-	--ii;
-      }
-      if (action.stop)
-	break;
+      if (action.stop) break;
     }
   };
   
@@ -88,8 +83,8 @@ SortedSet_\type GetBadSortedSet_\type(
   toreturn.delete = new bool(\type item) {
     for (int ii = 0; ii < buffer.length; ++ii) {
       if (equal(buffer[ii], item)) {
-	buffer.delete(ii);
-	return true;
+        buffer.delete(ii);
+        return true;
       }
     }
     return false;
