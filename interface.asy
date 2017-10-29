@@ -17,6 +17,29 @@ struct Iterable_\type {
   return buffer;
 }
 
+struct SortedSet_\type {
+  Iterable_\type iterable;
+  bool isemptyresponse(\type item);
+  int size();
+  bool empty() { return size() == 0; }
+  bool contains(\type item);
+  \type after(\type item);   // Returns the least element > item, or emptyresponse if there is no such element.
+  \type before(\type item);  // Returns the greatest element < item, or emptyresponse if there is no such element.
+  \type firstGEQ(\type item) { return contains(item) ? item : after(item); }
+  \type firstLEQ(\type item) { return contains(item) ? item : before(item); }
+  \type min();               // Returns emptyresponse if collection is empty.
+  \type max();               // Returns emptyresponse if collection is empty.
+  bool insert(\type item);   // Returns true iff the collection is modified.
+  bool delete(\type item);   // Returns true iff the collection is modified.
+  void foreach(IteratorAction process(\type item)) { iterable.foreach(process); }
+  void foreach(void process(\type item)) { iterable.foreach(process); }
+}
+
+Iterable_\type operator cast(SortedSet_\type data) { return data.iterable; }
+\type[] operator cast(SortedSet_\type data) { return data.iterable; }
+//";
+
+private string defineequalscode = "
 bool operator==(Iterable_\type a, Iterable_\type b) {
   return all((\type[])a == (\type[])b);
 }
@@ -39,28 +62,6 @@ bool operator==(Iterable_\type a, \type[] b) {
 bool operator!=(Iterable_\type a, \type[] b) { return !(a == b); }
 bool operator==(\type[] a, Iterable_\type b) { return b == a; }
 bool operator!=(\type[] a, Iterable_\type b) { return !(b == a); }
-
-struct SortedSet_\type {
-  Iterable_\type iterable;
-  bool isemptyresponse(\type item);
-  int size();
-  bool empty() { return size() == 0; }
-  bool contains(\type item);
-  \type after(\type item);   // Returns the least element > item, or emptyresponse if there is no such element.
-  \type before(\type item);  // Returns the greatest element < item, or emptyresponse if there is no such element.
-  \type firstGEQ(\type item) { return contains(item) ? item : after(item); }
-  \type firstLEQ(\type item) { return contains(item) ? item : before(item); }
-  \type min();               // Returns emptyresponse if collection is empty.
-  \type max();               // Returns emptyresponse if collection is empty.
-  bool insert(\type item);   // Returns true iff the collection is modified.
-  bool delete(\type item);   // Returns true iff the collection is modified.
-  void foreach(IteratorAction process(\type item)) { iterable.foreach(process); }
-  void foreach(void process(\type item)) { iterable.foreach(process); }
-}
-
-Iterable_\type operator cast(SortedSet_\type data) { return data.iterable; }
-
-\type[] operator cast(SortedSet_\type data) { return data.iterable; }
 //";
 
 // An IteratorAction is immutable once constructed.
@@ -81,6 +82,9 @@ struct IteratorAction {
 }
 
 
-void DefineInterfaces(string type) {
+void DefineInterfaces(string type, bool defineequals=true) {
   eval(replace(definesingletypeinterfaces, "\type", type), true);
+  if (defineequals) {
+    eval(replace(defineequalscode, "\type", type), true);
+  }
 }
