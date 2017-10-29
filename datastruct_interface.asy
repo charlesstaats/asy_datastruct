@@ -80,11 +80,3 @@ struct IteratorAction {
   restricted static IteratorAction RemoveAndQuit =
     IteratorAction(remove=true, stop=true);
 }
-
-
-void DefineInterfaces(string type, bool defineequals=true) {
-  eval(replace(definesingletypeinterfaces, "\type", type), true);
-  if (defineequals) {
-    eval(replace(defineequalscode, "\type", type), true);
-  }
-}
