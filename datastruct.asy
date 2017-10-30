@@ -18,12 +18,11 @@ private bool addnamespace(string namespace) {
   return false;
 }
 
-void RequireGenericModule(string parentmodule, string type, bool defineequals=true,
-                          bool overwrite = false) {
+void RequireGenericModule(string parentmodule, string type, bool defineequals=true) {
   string namespace = '_' + parentmodule + '_' + type;
   if (addnamespace(namespace)) {
     string codestring = DefineInterfacesCode(type, defineequals);
-    codestring = "struct " + namespace + "{" + '\n'
+    codestring = "struct " + namespace + "{" +
                  + codestring
                  + '\n' + "}";
     eval(codestring, true);

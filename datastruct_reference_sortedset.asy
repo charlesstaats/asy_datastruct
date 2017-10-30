@@ -1,9 +1,9 @@
+private string definesortedsetimpl = "
 // FOR TESTING ONLY
 // This file supplies a reference implementation for a SortedSet. It is intended to
 // be simple (hence easy to make bug-free) but not remotely efficient. Thus it is
 // useful to validate a more reasonable SortedSet implementation against.
 
-private string definesortedsetimpl = "
 SortedSet_\type GetBadSortedSet_\type(
     bool leq(\type a, \type b),
     \type emptyresponse,
