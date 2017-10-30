@@ -160,7 +160,7 @@ SortedSet_\type GetSpayTree_\type(
       if (current == null) {
         parentstack.pop();
         root = splay(parentstack);
-        return (upper == null ? emptyresponse : upper.value);
+        break;
       } else if (gt(current.value, item)) {
         parentstack.push(current.leftchild);
         upper = current;
@@ -168,6 +168,7 @@ SortedSet_\type GetSpayTree_\type(
         parentstack.push(current.rightchild);
       }
     }
+    return (upper == null ? emptyresponse : upper.value);
   };
 
   toreturn.before = new \type(\type item) {
@@ -181,7 +182,7 @@ SortedSet_\type GetSpayTree_\type(
       if (current == null) {
         parentstack.pop();
         root = splay(parentstack);
-        return (lower == null ? emptyresponse : lower.value);
+        break;
       } else if (geq(current.value, item)) {
         parentstack.push(current.leftchild);
       } else /* if (lt(current.value, item)) */ {
@@ -189,6 +190,7 @@ SortedSet_\type GetSpayTree_\type(
         lower = current;
       }
     }
+    return (lower == null ? emptyresponse : lower.value);
   };
 
   toreturn.min = new \type() {
@@ -301,16 +303,18 @@ SortedSet_\type GetSpayTree_\type(
     if (parent != null) root = splay(ancestors);
     return true;
     
-  }
+  };
 
   toreturn.iterable.foreach = new void(IteratorAction process(\type)) {
     if (root == null) return;
     root.inOrder(process); 
-  }
+  };
   
   toreturn.iterable.foreach = new void(void process(\type)) {
     if (root == null) return;
     root.inOrder(process); 
-  }
+  };
+
+  return toreturn;
 }
 //";

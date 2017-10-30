@@ -41,23 +41,17 @@ Iterable_\type operator cast(SortedSet_\type data) { return data.iterable; }
 
 private string defineequalscode = "
 bool operator==(Iterable_\type a, Iterable_\type b) {
-  return all((\type[])a == (\type[])b);
+  \type[] arr_a = a;
+  \type[] arr_b = b;
+  return arr_a.length == arr_b.length && all(arr_a == arr_b);
 }
 bool operator!=(Iterable_\type a, Iterable_\type b) {
   return !(a == b);
 }
 
 bool operator==(Iterable_\type a, \type[] b) {
-  bool areequal = true;
-  int ii = 0;
-  a.foreach(new IteratorAction(\type item) {
-    if (ii >= b.length || item != b[ii]) {
-      areequal = false;
-      return IteratorAction.Quit;
-    }
-    return IteratorAction.Continue;
-  });
-  return ii == b.length && areequal;
+  \type[] arr_a = a;
+  return arr_a.length == b.length && all(arr_a == b);
 }
 bool operator!=(Iterable_\type a, \type[] b) { return !(a == b); }
 bool operator==(\type[] a, Iterable_\type b) { return b == a; }

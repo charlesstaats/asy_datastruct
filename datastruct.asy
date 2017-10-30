@@ -1,7 +1,7 @@
 include datastruct_interface;
 
 string DefineInterfacesCode(string type, bool defineequals=true) {
-  codestring = replace(definesingletypeinterfaces, "\type", type);
+  string codestring = replace(definesingletypeinterfaces, "\type", type);
   if (defineequals) {
     codestring += replace(defineequalscode, "\type", type);
   }
@@ -11,7 +11,7 @@ string DefineInterfacesCode(string type, bool defineequals=true) {
 include datastruct_splayset;
 
 string DefineSplaySetCode(string type) {
-  codestring = replace(splaytreecode, "\type", type);
+  string codestring = replace(splaytreecode, "\type", type);
   return codestring;
 }
 
@@ -27,12 +27,18 @@ private bool addnamespace(string namespace) {
 
 void RequireGenericModule(string module, string type, bool defineequals=true) {
   string namespace = '_' + module + '_' + type;
-  if (addnamespace(namespace)) {
-    string codestring = DefineInterfacesCode(type, defineequals)
-                        + DefineSplaySetCode(type);
-    codestring = "struct " + namespace + "{" +
-                 + codestring
-                 + '\n' + "}";
-    eval(codestring, true);
-  }
+
+  // for testing (so that line numbers make sense)
+  write("DefineInterfacesCode");
+  eval(DefineInterfacesCode(type, defineequals), true);
+  write("DefineSplaySetCode");
+  eval(DefineSplaySetCode(type), true);
+//  if (addnamespace(namespace)) {
+//    string codestring = DefineInterfacesCode(type, defineequals)
+//                        + DefineSplaySetCode(type);
+//    codestring = "struct " + namespace + "{"
+//                 + codestring
+//                 + '\n' + "}";
+//    eval(codestring, true);
+//  }
 }
