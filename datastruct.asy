@@ -8,20 +8,24 @@ string DefineInterfacesCode(string type, bool defineequals=true) {
   return codestring;
 }
 
-bool fileexists(string filename) {
-  file testname = input(filename);
-  bool exists = !error(testname);
-  close(testname);
-  return exists;
+// TODO: use a set rather than an array
+private bool addnamespace(string namespace) {
+  static string[] namespaces;
+  if (all(namespaces != namespace)) {
+    namespaces.push(namespace);
+    return true;
+  }
+  return false;
 }
 
 void RequireGenericModule(string parentmodule, string type, bool defineequals=true,
                           bool overwrite = false) {
-  string filename = '_' + parentmodule + '_' + type + '.asy';
-  if (overwrite || !fileexists(filename)) {
-    file outfile = output(filename); 
+  string namespace = '_' + parentmodule + '_' + type;
+  if (addnamespace(namespace)) {
     string codestring = DefineInterfacesCode(type, defineequals);
-    write(outfile, codestring);
-    close(outfile);
+    codestring = "struct " + namespace + "{" + '\n'
+                 + codestring
+                 + '\n' + "}";
+    eval(codestring, true);
   }
 }
