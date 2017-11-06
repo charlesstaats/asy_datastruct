@@ -1,5 +1,5 @@
 private string splaytreecode = "
-SortedSet_\type GetSpayTree_\type(
+SortedSet_\type GetSplayTree_\type(
     bool leq(\type a, \type b),
     \type emptyresponse,
     bool isemptyresponse(\type)) {
