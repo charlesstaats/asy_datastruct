@@ -7,7 +7,7 @@ SortedSet_\type GetSplayTree_\type(
     return leq(a, b) && leq(b, a);
   }
   bool gt(\type a, \type b) {
-    return !leq(b, a);
+    return !leq(a, b);
   }
   bool lt(\type a, \type b) {
     return gt(b, a);
@@ -220,6 +220,7 @@ SortedSet_\type GetSplayTree_\type(
   toreturn.insert = new bool(\type value) {
     if (root == null) {
       root = treenode(value);
+      ++size;
       return true;
     }
     treenode[] ancestors = new treenode[0];
@@ -249,6 +250,7 @@ SortedSet_\type GetSplayTree_\type(
     }
 
     root = splay(ancestors);
+    ++size;
     return true;
   };
 
@@ -301,8 +303,8 @@ SortedSet_\type GetSplayTree_\type(
     }
 
     if (parent != null) root = splay(ancestors);
+    --size;
     return true;
-    
   };
 
   toreturn.iterable.foreach = new void(IteratorAction process(\type)) {

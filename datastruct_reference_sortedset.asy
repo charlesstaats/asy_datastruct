@@ -25,7 +25,7 @@ SortedSet_\type GetBadSortedSet_\type(
   }
 
   bool gt(\type a, \type b) {
-    return !leq(b, a);
+    return !leq(a, b);
   }
 
   bool lt(\type a, \type b) {

@@ -48,6 +48,12 @@ bool operator==(Iterable_\type a, Iterable_\type b) {
 bool operator!=(Iterable_\type a, Iterable_\type b) {
   return !(a == b);
 }
+bool operator==(SortedSet_\type a, SortedSet_\type b) {
+  return ((Iterable_\type)a == (Iterable_\type)b);
+}
+bool operator!=(SortedSet_\type a, SortedSet_\type b) {
+  return !(a == b);
+}
 
 bool operator==(Iterable_\type a, \type[] b) {
   \type[] arr_a = a;
