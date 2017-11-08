@@ -16,7 +16,7 @@ SortedSet_tint reference = GetBadSortedSet_tint(operator<=, intMin, isEmptyRespo
 SortedSet_tint splayset = GetSplayTree_tint(operator<=, intMin, isEmptyResponse);
 
 tint getrand() {
-  return rand() % 41;
+  return rand() % 127;
 }
 
 typedef void command();
@@ -31,8 +31,54 @@ string operator cast(bool b) {
   return b ? "true" : "false";
 }
 
-int maxlength = 0;
-
+validations[Fns.BEFORE] = new void() {
+  tint[][] previous = new tint[][]{reference, splayset};
+  tint toask = getrand();
+  tint refbefore = reference.before(toask);
+  tint splaysetbefore = splayset.before(toask);
+  if (refbefore != splaysetbefore ||
+      reference != splayset) {
+    write("error querying before " + (string)toask);
+    write("before:");
+    write(previous);
+    write("ref before: " + (string)refbefore);
+    write("splayset before: " + (string)splaysetbefore);
+    writesets();
+    assert(false);
+  }
+};
+validations[Fns.AFTER] = new void() {
+  tint[][] previous = new tint[][]{reference, splayset};
+  tint toask = getrand();
+  tint refafter = reference.after(toask);
+  tint splaysetafter = splayset.after(toask);
+  if (refafter != splaysetafter ||
+      reference != splayset) {
+    write("error querying after " + (string)toask);
+    write("before:");
+    write(previous);
+    write("ref after: " + (string)refafter);
+    write("splayset after: " + (string)splaysetafter);
+    writesets();
+    assert(false);
+  }
+};
+validations[Fns.CONTAINS] = new void() {
+  tint[][] previous = new tint[][]{reference, splayset};
+  tint toask = getrand();
+  bool refcontained = reference.contains(toask);
+  bool splaysetcontained = splayset.contains(toask);
+  if (refcontained != splaysetcontained ||
+      reference != splayset) {
+    write("error querying contains " + (string)toask);
+    write("before:");
+    write(previous);
+    write("ref contained: " + (string)refcontained);
+    write("splayset contained: " + (string)splaysetcontained);
+    writesets();
+    assert(false);
+  }
+};
 validations[Fns.INSERT] = new void() {
   tint[][] previous = new tint[][]{reference, splayset};
   tint toinsert = getrand();
@@ -48,7 +94,6 @@ validations[Fns.INSERT] = new void() {
     writesets();
     assert(false);
   }
-  maxlength = max(maxlength, splayset.size());
 };
 validations[Fns.DELETE] = new void() {
   tint[][] previous = new tint[][]{reference, splayset};
@@ -65,11 +110,24 @@ validations[Fns.DELETE] = new void() {
     writesets();
     assert(false);
   }
-  maxlength = max(maxlength, splayset.size());
 };
 
-for (int i = 0; i < 500; ++i) {
-  int action = floor(2/*Fns.length*/ * unitrand());
+void randomaction() {
+  int action = floor(5/*Fns.length*/ * unitrand());
   validations[action](); 
 }
-write('max length: ' + (string)maxlength);
+
+for (int i = 0; i < 1000; ++i) {
+  randomaction();
+}
+
+// test with insert favored, then delete favored
+for (int i = 0; i < 1000; ++i) {
+  if (unitrand() > 0.4) validations[Fns.INSERT]();
+  else randomaction();
+}
+for (int i = 0; i < 1200; ++i) {
+  if (unitrand() > 0.5) validations[Fns.DELETE]();
+  else randomaction();
+}
+
