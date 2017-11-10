@@ -23,7 +23,7 @@ typedef void command();
 command[] validations = new command[Fns.length];
 
 void writesets() {
-  write("reference splayset");
+  write("reference \n splayset:");
   write(new tint[][]{reference, splayset});
 }
 
@@ -31,37 +31,56 @@ string operator cast(bool b) {
   return b ? "true" : "false";
 }
 
-validations[Fns.BEFORE] = new void() {
-  tint[][] previous = new tint[][]{reference, splayset};
+void testget(tint reffn(tint), tint testedfn(tint), string fnname) {
+  tint[][] old = new tint[][]{reference, splayset};
   tint toask = getrand();
-  tint refbefore = reference.before(toask);
-  tint splaysetbefore = splayset.before(toask);
-  if (refbefore != splaysetbefore ||
+  tint refresponse = reffn(toask);
+  tint testedresponse = testedfn(toask);
+  if (refresponse != testedresponse ||
       reference != splayset) {
-    write("error querying before " + (string)toask);
+    write("error: " + fnname + "(" + (string)toask + "):");
     write("before:");
-    write(previous);
-    write("ref before: " + (string)refbefore);
-    write("splayset before: " + (string)splaysetbefore);
+    write(old);
+    write("reference." + fnname + "(" + (string)toask + ") = " + (string)refresponse);
+    write("tested." + fnname + "(" + (string)toask + ") = "  + (string)testedresponse);
     writesets();
     assert(false);
   }
+}
+
+void testget(tint reffn(), tint testedfn(), string fnname) {
+  tint[][] old = new tint[][]{reference, splayset};
+  tint refresponse = reffn();
+  tint testedresponse = testedfn();
+  if (refresponse != testedresponse ||
+      reference != splayset) {
+    write("error: " + fnname + "():");
+    write("before:");
+    write(old);
+    write("reference." + fnname + "() = " + (string)refresponse);
+    write("tested." + fnname + "() = "  + (string)testedresponse);
+    writesets();
+    assert(false);
+  }
+}
+
+//validations[Fns.MIN] = new void() {
+//  testget(reference.min, splayset.min, "min");
+//};
+//validations[Fns.MAX] = new void() {
+//  testget(reference.max, splayset.min, "max");
+//};
+validations[Fns.FIRSTLEQ] = new void() {
+  testget(reference.firstLEQ, splayset.firstLEQ, "firstLEQ");
+};
+validations[Fns.FIRSTGEQ] = new void() {
+  testget(reference.firstGEQ, splayset.firstGEQ, "firstGEQ");
+};
+validations[Fns.BEFORE] = new void() {
+  testget(reference.before, splayset.before, "before");
 };
 validations[Fns.AFTER] = new void() {
-  tint[][] previous = new tint[][]{reference, splayset};
-  tint toask = getrand();
-  tint refafter = reference.after(toask);
-  tint splaysetafter = splayset.after(toask);
-  if (refafter != splaysetafter ||
-      reference != splayset) {
-    write("error querying after " + (string)toask);
-    write("before:");
-    write(previous);
-    write("ref after: " + (string)refafter);
-    write("splayset after: " + (string)splaysetafter);
-    writesets();
-    assert(false);
-  }
+  testget(reference.after, splayset.after, "after");
 };
 validations[Fns.CONTAINS] = new void() {
   tint[][] previous = new tint[][]{reference, splayset};
@@ -113,21 +132,24 @@ validations[Fns.DELETE] = new void() {
 };
 
 void randomaction() {
-  int action = floor(5/*Fns.length*/ * unitrand());
+  int action = floor(7/*Fns.length*/ * unitrand());
   validations[action](); 
 }
 
-for (int i = 0; i < 1000; ++i) {
-  randomaction();
+void runtests() {
+  for (int i = 0; i < 1000; ++i) {
+    randomaction();
+  }
+
+  // test with insert favored, then delete favored
+  for (int i = 0; i < 1000; ++i) {
+    if (unitrand() > 0.4) validations[Fns.INSERT]();
+    else randomaction();
+  }
+  for (int i = 0; i < 1200; ++i) {
+    if (unitrand() > 0.5) validations[Fns.DELETE]();
+    else randomaction();
+  }
 }
 
-// test with insert favored, then delete favored
-for (int i = 0; i < 1000; ++i) {
-  if (unitrand() > 0.4) validations[Fns.INSERT]();
-  else randomaction();
-}
-for (int i = 0; i < 1200; ++i) {
-  if (unitrand() > 0.5) validations[Fns.DELETE]();
-  else randomaction();
-}
-
+runtests();
