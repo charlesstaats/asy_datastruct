@@ -8,7 +8,7 @@ SupplyBadSortedSetImpl("tint");
 import enums;
 DefineEnum("datastruct_splayset_test", "Fns",
            "INSERT,DELETE,CONTAINS,AFTER,BEFORE,FIRSTGEQ,FIRSTLEQ," +
-               "MIN,MAX,ISEMPTYRESPONSE,SIZE,EMPTY,FOREACH_action,FOREACH");
+              "MIN,MAX,SIZE,EMPTY,FOREACH_action");
 typedef _datastruct_splayset_test_Fns Fns;
 
 bool isEmptyResponse(tint a) { return a == intMin; }
@@ -51,8 +51,11 @@ void testget(tint reffn(tint), tint testedfn(tint), string fnname) {
 void testget(tint reffn(), tint testedfn(), string fnname) {
   tint[][] old = new tint[][]{reference, splayset};
   tint refresponse = reffn();
+  bool refemptyresponse = reference.isemptyresponse(refresponse);
   tint testedresponse = testedfn();
-  if (refresponse != testedresponse ||
+  bool testedemptyresponse = splayset.isemptyresponse(testedresponse);
+  if (refemptyresponse != testedemptyresponse ||
+      (!refemptyresponse && (refresponse != testedresponse)) ||
       reference != splayset) {
     write("error: " + fnname + "():");
     write("before:");

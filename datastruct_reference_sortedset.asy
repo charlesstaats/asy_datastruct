@@ -10,6 +10,8 @@ SortedSet_\type GetBadSortedSet_\type(
     bool isemptyresponse(\type)) {
   SortedSet_\type toreturn;
   \type[] buffer;
+
+  toreturn.isemptyresponse = isemptyresponse;
   
   toreturn.iterable.foreach = new void(IteratorAction process(\type)) {
     for (int ii = 0; ii < buffer.length; ++ii) {
