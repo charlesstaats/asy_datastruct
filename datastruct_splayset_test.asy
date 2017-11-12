@@ -31,7 +31,24 @@ string operator cast(bool b) {
   return b ? "true" : "false";
 }
 
-void testget(tint reffn(tint), tint testedfn(tint), string fnname) {
+void testfn(bool reffn(tint), bool testedfn(tint), string fnname) {
+  tint[][] old = new tint[][]{reference, splayset};
+  tint toask = getrand();
+  bool refresponse = reffn(toask);
+  bool testedresponse = testedfn(toask);
+  if (refresponse != testedresponse ||
+      reference != splayset) {
+    write("error: " + fnname + "(" + (string)toask + "):");
+    write("before:");
+    write(old);
+    write("reference." + fnname + "(" + (string)toask + ") = " + (string)refresponse);
+    write("tested." + fnname + "(" + (string)toask + ") = "  + (string)testedresponse);
+    writesets();
+    assert(false);
+  }
+}
+
+void testfn(tint reffn(tint), tint testedfn(tint), string fnname) {
   tint[][] old = new tint[][]{reference, splayset};
   tint toask = getrand();
   tint refresponse = reffn(toask);
@@ -48,7 +65,7 @@ void testget(tint reffn(tint), tint testedfn(tint), string fnname) {
   }
 }
 
-void testget(tint reffn(), tint testedfn(), string fnname) {
+void testfn(tint reffn(), tint testedfn(), string fnname) {
   tint[][] old = new tint[][]{reference, splayset};
   tint refresponse = reffn();
   bool refemptyresponse = reference.isemptyresponse(refresponse);
@@ -68,70 +85,31 @@ void testget(tint reffn(), tint testedfn(), string fnname) {
 }
 
 validations[Fns.MIN] = new void() {
-  testget(reference.min, splayset.min, "min");
+  testfn(reference.min, splayset.min, "min");
 };
 validations[Fns.MAX] = new void() {
-  testget(reference.max, splayset.max, "max");
+  testfn(reference.max, splayset.max, "max");
 };
 validations[Fns.FIRSTLEQ] = new void() {
-  testget(reference.firstLEQ, splayset.firstLEQ, "firstLEQ");
+  testfn(reference.firstLEQ, splayset.firstLEQ, "firstLEQ");
 };
 validations[Fns.FIRSTGEQ] = new void() {
-  testget(reference.firstGEQ, splayset.firstGEQ, "firstGEQ");
+  testfn(reference.firstGEQ, splayset.firstGEQ, "firstGEQ");
 };
 validations[Fns.BEFORE] = new void() {
-  testget(reference.before, splayset.before, "before");
+  testfn(reference.before, splayset.before, "before");
 };
 validations[Fns.AFTER] = new void() {
-  testget(reference.after, splayset.after, "after");
+  testfn(reference.after, splayset.after, "after");
 };
 validations[Fns.CONTAINS] = new void() {
-  tint[][] previous = new tint[][]{reference, splayset};
-  tint toask = getrand();
-  bool refcontained = reference.contains(toask);
-  bool splaysetcontained = splayset.contains(toask);
-  if (refcontained != splaysetcontained ||
-      reference != splayset) {
-    write("error querying contains " + (string)toask);
-    write("before:");
-    write(previous);
-    write("ref contained: " + (string)refcontained);
-    write("splayset contained: " + (string)splaysetcontained);
-    writesets();
-    assert(false);
-  }
+  testfn(reference.contains, splayset.contains, "contains");
 };
 validations[Fns.INSERT] = new void() {
-  tint[][] previous = new tint[][]{reference, splayset};
-  tint toinsert = getrand();
-  bool refinsertchanged = reference.insert(toinsert);
-  bool splaysetinsertchanged = splayset.insert(toinsert);
-  if (refinsertchanged != splaysetinsertchanged ||
-      reference != splayset) {
-    write("error inserting " + (string)toinsert);
-    write("before:");
-    write(previous);
-    write("ref insert changed: " + (string)refinsertchanged);
-    write("splayset insert changed: " + (string)splaysetinsertchanged);
-    writesets();
-    assert(false);
-  }
+  testfn(reference.insert, splayset.insert, "insert");
 };
 validations[Fns.DELETE] = new void() {
-  tint[][] previous = new tint[][]{reference, splayset};
-  tint todelete = getrand();
-  bool refdeletechanged = reference.delete(todelete);
-  bool splaysetdeletechanged = splayset.delete(todelete);
-  if (refdeletechanged != splaysetdeletechanged ||
-      reference != splayset) {
-    write("error deleting " + (string)todelete);
-    write("before:");
-    write(previous);
-    write("ref delete changed: " + (string)refdeletechanged);
-    write("splayset delete changed: " + (string)splaysetdeletechanged);
-    writesets();
-    assert(false);
-  }
+  testfn(reference.delete, splayset.delete, "delete");
 };
 
 void randomaction() {
