@@ -194,6 +194,7 @@ SortedSet_\type GetSplayTree_\type(
   };
 
   toreturn.min = new \type() {
+    if (root == null) return emptyresponse;
     treenode[] parentstack = new treenode[0];
     parentstack.cyclic = true;
     parentstack.push(root);
@@ -205,6 +206,7 @@ SortedSet_\type GetSplayTree_\type(
   };
 
   toreturn.max = new \type() {
+    if (root == null) return emptyresponse;
     treenode[] parentstack = new treenode[0];
     parentstack.cyclic = true;
     parentstack.push(root);

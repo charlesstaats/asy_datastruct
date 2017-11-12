@@ -64,12 +64,12 @@ void testget(tint reffn(), tint testedfn(), string fnname) {
   }
 }
 
-//validations[Fns.MIN] = new void() {
-//  testget(reference.min, splayset.min, "min");
-//};
-//validations[Fns.MAX] = new void() {
-//  testget(reference.max, splayset.min, "max");
-//};
+validations[Fns.MIN] = new void() {
+  testget(reference.min, splayset.min, "min");
+};
+validations[Fns.MAX] = new void() {
+  testget(reference.max, splayset.max, "max");
+};
 validations[Fns.FIRSTLEQ] = new void() {
   testget(reference.firstLEQ, splayset.firstLEQ, "firstLEQ");
 };
@@ -132,7 +132,7 @@ validations[Fns.DELETE] = new void() {
 };
 
 void randomaction() {
-  int action = floor(7/*Fns.length*/ * unitrand());
+  int action = floor(9/*Fns.length*/ * unitrand());
   validations[action](); 
 }
 
