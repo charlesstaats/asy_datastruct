@@ -84,6 +84,22 @@ void testfn(tint reffn(), tint testedfn(), string fnname) {
   }
 }
 
+validations[Fns.SIZE] = new void() {
+  tint[][] old = new tint[][]{reference, splayset};
+  int refresponse = reference.size();
+  bool refemptyresponse = reference.isemptyresponse(refresponse);
+  int testedresponse = splayset.size();
+  if (refresponse != testedresponse ||
+      reference != splayset) {
+    write("error: " + fnname + "():");
+    write("before:");
+    write(old);
+    write("reference." + fnname + "() = " + (string)refresponse);
+    write("tested." + fnname + "() = "  + (string)testedresponse);
+    writesets();
+    assert(false);
+  }
+};
 validations[Fns.MIN] = new void() {
   testfn(reference.min, splayset.min, "min");
 };
@@ -113,7 +129,7 @@ validations[Fns.DELETE] = new void() {
 };
 
 void randomaction() {
-  int action = floor(9/*Fns.length*/ * unitrand());
+  int action = floor(10/*Fns.length*/ * unitrand());
   validations[action](); 
 }
 
