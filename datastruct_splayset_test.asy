@@ -8,7 +8,7 @@ SupplyBadSortedSetImpl("tint");
 import enums;
 DefineEnum("datastruct_splayset_test", "Fns",
            "INSERT,DELETE,CONTAINS,AFTER,BEFORE,FIRSTGEQ,FIRSTLEQ," +
-              "MIN,MAX,SIZE,EMPTY,FOREACH_action");
+              "MIN,MAX,SIZE,EMPTY");
 typedef _datastruct_splayset_test_Fns Fns;
 
 bool isEmptyResponse(tint a) { return a == intMin; }
@@ -134,7 +134,7 @@ validations[Fns.DELETE] = new void() {
 };
 
 void randomaction() {
-  int action = floor(11/*Fns.length*/ * unitrand());
+  int action = floor(Fns.length * unitrand());
   validations[action](); 
 }
 
