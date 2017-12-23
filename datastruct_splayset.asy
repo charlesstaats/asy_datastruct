@@ -310,8 +310,7 @@ SortedSet_\type GetSplayTree_\type(
   };
 
   toreturn.iterable.foreach = new void(IteratorAction process(\type)) {
-    if (root == null) return;
-    root.inOrder(process); 
+    abort('IteratorAction not supported for splay sets.');
   };
   
   toreturn.iterable.foreach = new void(void process(\type)) {
