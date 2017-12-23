@@ -25,20 +25,41 @@ private bool addnamespace(string namespace) {
   return false;
 }
 
-void RequireGenericModule(string module, string type, bool defineequals=true) {
-  string namespace = '_' + module + '_' + type;
+// Returns the code to replace the specified file with an empty file.
+private string EmptyFileCode(string filename) {
+  static string template = "
+file todelete = output('\filename');
+write(todelete);
+close(todelete);
+//";
+  return replace(template, "\filename", filename);
+}
 
-  // for testing (so that line numbers make sense)
-  write("DefineInterfacesCode");
-  eval(DefineInterfacesCode(type, defineequals), true);
-  write("DefineSplaySetCode");
-  eval(DefineSplaySetCode(type), true);
-//  if (addnamespace(namespace)) {
-//    string codestring = DefineInterfacesCode(type, defineequals)
-//                        + DefineSplaySetCode(type);
-//    codestring = "struct " + namespace + "{"
-//                 + codestring
-//                 + '\n' + "}";
-//    eval(codestring, true);
-//  }
+private void RequireModuleExists(string createcode() ... string[] components) {
+  string namespace;
+  for (string component : components)
+    namespace += '_' + component;
+  if (addnamespace(namespace)) {
+    string inner_module_code = createcode();
+    string outer_filename = namespace + '.asy';
+    file outer_module = output(outer_filename);
+    write(outer_module, 'include _' + namespace + ';', suffix=endl);
+    // Module empties itself once included.
+    write(outer_module, EmptyFileCode(outer_filename), suffix=flush);
+    close(outer_module);
+
+    string inner_filename = '_' + namespace + '.asy';
+    file inner_module = output(inner_filename);
+    write(inner_module, inner_module_code, suffix=flush);
+    close(inner_module);
+  }
+}
+
+void RequireGenericModule(string module, string type, bool defineequals=true) {
+  
+  var modulecode = new string() {
+                     return DefineInterfacesCode(type, defineequals) + '\n' +
+                         DefineSplaySetCode(type);
+                   };
+  RequireModuleExists(modulecode, 'datastruct', module, type);
 }

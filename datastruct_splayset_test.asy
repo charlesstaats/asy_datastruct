@@ -3,6 +3,7 @@ import datastruct_reference_sortedset;
 
 typedef int tint;
 RequireGenericModule("datastruct_splayset_test", "tint");
+include _datastruct_datastruct_splayset_test_tint;
 SupplyBadSortedSetImpl("tint");
 
 import enums;
